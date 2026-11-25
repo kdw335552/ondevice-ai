@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>온디바이스AI 실습 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f4f4f1;--card:#fff;--fg:#1d2221;--sub:#5b6461;--line:#d9dcd6;--ac:#1f6b5f;--ac2:#b5652a;--tint:#e8f2ef}
+@media (prefers-color-scheme:dark){:root{--bg:#141817;--card:#1c2120;--fg:#e6ebe9;--sub:#9aa4a1;--line:#2e3533;--ac:#5cc2ae;--ac2:#e39a63;--tint:#1d2b28}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 "IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif}
+main{max-width:880px;margin:0 auto;padding:48px max(16px,env(safe-area-inset-left)) 64px}
+.eyebrow{color:var(--sub);font-size:14px;margin:0}
+h1{font-size:34px;line-height:1.25;margin:6px 0 10px;text-wrap:balance}
+.lead{color:var(--sub);margin:0 0 28px}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+a.day{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--ac);border-radius:12px;padding:20px 22px}
+a.day.d2{border-left-color:var(--ac2)}
+a.day:hover{border-color:var(--ac)}
+.day .when{color:var(--sub);font-size:14px}
+.day b{display:block;font-size:22px;margin:4px 0 6px}
+.day ul{margin:8px 0 0;padding-left:18px;color:var(--sub);font-size:15px}
+.start{margin-top:24px;background:var(--tint);border-radius:12px;padding:16px 20px}
+.start a{color:var(--ac);font-weight:600}
+code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.92em}
+.foot{margin-top:28px;color:var(--sub);font-size:13px}
+</style></head><body><main>
+<p class="eyebrow">[인공지능] 피지컬AI의 기초를 위한 임베디드·온디바이스 실습 · 2026-11-28 ~ 29 · 김덕우 강사</p>
+<h1>온디바이스AI 실습 가이드</h1>
+<p class="lead">책상 자리 상태(<code>empty</code> · <code>in_use</code> · <code>on_hold</code>)를 알아보는 작은 모델 하나를 라즈베리파이 5에 올려, 보드 사양 읽기부터 경량화·센서·전력·디버깅까지 실습 6개를 단계별로 진행합니다.</p>
+<div class="days">
+<a class="day" href="day1.html"><span class="when">1일차 · 11-28(토)</span><b>올리고 줄이기</b><ul><li>라즈베리파이 설치 · 접속</li><li>실습 1 · 이 보드에 무엇이 올라가는가</li><li>실습 2 · 일단 한 장 찍어 맞혀 본다</li><li>실습 3 · 작게 만들면 빨라질까</li></ul></a>
+<a class="day d2" href="day2.html"><span class="when">2일차 · 11-29(일)</span><b>돌리고 고치기</b><ul><li>실습 4 · 모델 말고 그 앞을 줄인다</li><li>실습 5 · 얼마나 자주 봐야 하는가</li><li>실습 6 · 오류가 안 나는 고장</li></ul></a>
+</div>
+<div class="start">처음이면 <a href="day1.html#lab0">1일차 「라즈베리파이 설치」</a>부터 — 자리 번호로 호스트 이름을 정하고, 적은 값이 아래 명령에 그대로 채워집니다.</div>
+<p class="foot">실습 데이터는 가상이고 카메라는 책상 위만 찍습니다. 실습 코드는 교육 당일 배포 자료로 받습니다. 적은 값과 체크 표시는 이 브라우저에만 기억됩니다.</p>
+</main></body></html>

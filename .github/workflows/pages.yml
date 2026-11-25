@@ -1,0 +1,49 @@
+# 3차 온디바이스AI 실습 가이드 — GitHub Pages 배포
+# 2일차(day2.html)는 2026-11-29 08:30 KST(= 11-28 23:30 UTC) 전에는 안내 페이지만 올린다.
+# 그 뒤에는 저장소 비밀값 DAY2_KEY 로 day2.html.enc 를 풀어 진짜 2일차를 올린다.
+name: pages
+on:
+  push:
+    branches: [main]
+  schedule:              # UTC 기준. 늦게 돌 수는 있어도 일찍 돌지는 않는다
+    - cron: "30 23 28 11 *"
+    - cron: "50 23 28 11 *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 사이트 만들기
+        env:
+          DAY2_KEY: ${{ secrets.DAY2_KEY }}
+        run: |
+          mkdir _site
+          cp index.html day1.html day2.html _site/
+          touch _site/.nojekyll
+          OPEN=$(date -u -d '2026-11-28T23:30:00Z' +%s)
+          NOW=$(date -u +%s)
+          if [ "$NOW" -ge "$OPEN" ]; then
+            if [ -z "$DAY2_KEY" ]; then echo "::error::저장소 비밀값 DAY2_KEY 가 없습니다"; exit 1; fi
+            printf '%s\n' "$DAY2_KEY" > "$RUNNER_TEMP/k"   # 첫 줄만 읽으므로 끝 줄바꿈이 있어도 같음
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass file:"$RUNNER_TEMP/k" -in day2.html.enc -out _site/day2.html
+            rm -f "$RUNNER_TEMP/k"
+            echo "2일차 공개"
+          else
+            echo "공개 전 — 2일차는 안내 페이지"
+          fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4
