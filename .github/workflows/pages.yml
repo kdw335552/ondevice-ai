@@ -17,11 +17,10 @@ concurrency:
   group: pages
   cancel-in-progress: false
 jobs:
-  deploy:
+  # 만들기와 올리기를 두 job 으로 나눈다 — 한 job 안에서 곧바로 찾으면
+  # 「No artifacts named github-pages」가 날 수 있다(actions/deploy-pages#451 · 2026-11-25 첫 배포에서 겪음)
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - name: 사이트 만들기
@@ -45,5 +44,12 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v4
