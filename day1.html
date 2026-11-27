@@ -1080,9 +1080,63 @@ start (Get-ChildItem *_one.jpg | Sort-Object LastWriteTime | Select-Object -Last
 </div><!--/pc-->
 <p class="look">👀 <b>볼 것</b> — 사진에 <b>책상 위</b>가 제대로 담겼는지(뒤집힘 · 흐림 · 어두움). 아래 글씨는 모델의 판정입니다 — 모델 이야기는 실습 2·3 에서 합니다.</p>
 <p class="sos">🆘 「모의(샘플 그림)」 라고 나오면 카메라가 안 잡힌 것입니다 → 단계 2 의 <code>rpicam-hello --list-cameras</code> 부터 다시.</p>
-<p class="sub">사진 아래 노란 글씨 — <code>float</code> 는 이 실습에서 재는 모델(<b>가상 그림</b>으로 배움), <code>real</code> 은 강사가 <b>실제 카메라 사진</b>으로 따로 배운 비교용 모델입니다(있을 때만 나옴). 가상 그림 모델이 진짜 책상에서 엉뚱하게 답하는 것은 <b>고장이 아니라</b> 무엇으로 배웠는가의 차이입니다. 사진은 <code>~/labs/snaps/</code> 에 남습니다 — 사람은 찍지 않고, 마지막 시간에 함께 지웁니다.</p>
+<p class="sub">사진 아래 노란 글씨 — <code>float</code> 는 이 실습에서 재는 모델(<b>가상 그림</b>으로 배움), <code>real</code> 은 강사가 <b>실제 카메라 사진</b>으로 따로 배운 비교용 모델입니다(있을 때만 나옴) — <a href="#realmodel">만드는 법</a>. 가상 그림 모델이 진짜 책상에서 엉뚱하게 답하는 것은 <b>고장이 아니라</b> 무엇으로 배웠는가의 차이입니다. 사진은 <code>~/labs/snaps/</code> 에 남습니다 — 사람은 찍지 않고, 마지막 시간에 함께 지웁니다.</p>
 <p class="next">➡️ <b>넘어가도 되나</b> — 사진을 열어 <b>볼 것</b>을 확인했으면 됩니다. 점검 점수와는 관계없습니다.</p>
 <div class="stepend"><label class="done"><input type="checkbox" id="ck-l1-run" data-k="l1-run"><span>이 단계 끝 — 했어요</span></label></div>
+<details class="bk" id="realmodel"><summary><span class="bk-tag">참고 · 현장 적용</span><span class="bk-title">📷 실제 사진 모델은 이렇게 만들었습니다 — 내 교실에서 그대로 따라 하기 (약 15분)</span></summary>
+<div class="why"><span class="why-k">📍 왜 · 언제</span><p>강사가 오늘 수업 전에 한 일입니다. 훈련생 교실에서도 같은 순서로 만들 수 있게 그대로 적었습니다. 「👀 실제로 돌려 보기」에서 가상 그림으로 배운 <code>float</code> 모델 옆에 <b>실제 사진으로 배운 <code>real</code> 모델</b>을 나란히 보여 줍니다(무엇으로 배웠는가가 답을 정한다). 수업 자리 · 조명 · 카메라 각도가 바뀌면 다시 만들어야 하므로 <b>교육장에서 첫 교시 전에</b> 만듭니다. 없어도 수업은 진행됩니다(<code>real</code> 줄만 안 나옴). 측정 · 점검에 쓰는 모델은 그대로입니다.</p></div>
+<div class="tbl"><table><thead><tr><th>순서</th><th>어디서</th><th>할 일</th><th>시간(추정)</th></tr></thead><tbody><tr><td>① 찍기</td><td>🍓 찍는 보드</td><td>세 상태를 30장씩</td><td>5분</td></tr><tr><td>② 가져오기</td><td>💻 PC</td><td><code>real_data</code> 폴더를 PC 로</td><td>1분</td></tr><tr><td>③ 학습</td><td>💻 PC</td><td><code>make_model_real.py</code></td><td>1~3분</td></tr><tr><td>④ 나눠 주기</td><td>💻 → 🍓</td><td>여러 보드로</td><td>5분</td></tr><tr><td>⑤ 확인</td><td>🍓 보드</td><td><code>snap.py</code> 에 <code>real</code> 줄</td><td>1분</td></tr><tr><td>⑥ 정리</td><td>🍓 · 💻</td><td>모은 사진 지우기</td><td>수업 끝</td></tr></tbody></table></div>
+<h4>① 찍기 — 사진을 찍을 보드 (카메라를 수업 때 자리 · 방향 그대로)</h4>
+<div class="tbl"><table><thead><tr><th>이름</th><th>책상 위에 둘 것 (교재 소재 정의)</th></tr></thead><tbody><tr><td><code>empty</code></td><td>비어 있는 책상</td></tr><tr><td><code>in_use</code></td><td>노트북을 펼쳐 둔 책상(필기구 · 컵 등 함께)</td></tr><tr><td><code>on_hold</code></td><td>가방 · 겉옷만 있거나 노트북이 덮여 있는 책상</td></tr></tbody></table></div>
+<div class="code cmd at-board"><span class="lang">🍓 보드 · ssh 창 (사진을 찍는 보드)</span><button class="copy" type="button">복사</button><pre><code>cd ~/labs/lab2_runtime/starter
+python3 ../../common/snap.py --collect empty 30
+python3 ../../common/snap.py --collect in_use 30
+python3 ../../common/snap.py --collect on_hold 30
+ls ~/labs/real_data/*/ | wc -l</code></pre></div>
+<p>0.5초마다 한 장, 30장에 약 15초입니다. 찍는 동안 <b>물건의 위치 · 각도 · 종류를 조금씩 바꿉니다</b>(같은 장면 30장보다 조금씩 다른 30장이 낫습니다). <b>사람(얼굴 · 손)은 찍지 않습니다.</b> 경계가 애매한 장면은 찍지 않습니다(교재: 애매한 사진은 버린다).</p>
+<div class="code term at-board"><span class="lang">이러면 정상 — 한 상태 (snap.py 가 찍는 글자)</span><button class="copy" type="button">복사</button><pre><code>empty 사진 30장 — 0.5초마다 찍습니다. 물건 위치·각도를 조금씩 바꾸십시오 (사람은 찍지 않습니다)
+  30/30
+저장: /home/rasp/labs/real_data/empty (30장)</code></pre></div>
+<p class="sos">🆘 <code>⚠️ 카메라가 없어 샘플 그림입니다</code> → 카메라를 못 찾은 것입니다. 그 사진은 쓰지 않습니다(<code>rm -r ~/labs/real_data/empty</code>) — <code>rpicam-hello --list-cameras</code> 부터. · <code>이름은 ['empty', 'in_use', 'on_hold'] 중 하나입니다</code> → 상태 이름 철자. · 더 찍고 싶으면 같은 명령을 다시 — 파일 이름에 시각이 들어가 <b>덧붙습니다</b>(지워지지 않음).</p>
+<h4>② 가져오기 · ③ 학습 — PC</h4>
+<div class="where-pc"><div class="where-h">💻 PC 에서 작업<span>PowerShell · 텐서플로가 있는 PC</span></div>
+<p>실습 코드 zip 을 풀어 둔 폴더(<code>labs</code> 가 보이는 자리)에서:</p>
+<div class="code cmd at-pc"><span class="lang">💻 PC · PowerShell</span><button class="copy" type="button">복사</button><pre><code>scp -r rasp@<span class="fv" data-f="ip">10.10.220.___</span>:~/labs/real_data .
+C:\cv_lab\edge_venv\Scripts\python.exe .\labs\common\make_model_real.py .\real_data</code></pre></div>
+<p class="sub">텐서플로가 있는 파이썬으로 돌립니다(이 강의의 강사 노트북은 <code>C:\cv_lab\edge_venv</code> — 내 PC 의 경로로 바꿉니다). 밑판 MobileNetV2 가중치는 실습 코드 <code>common\model\</code> 에 들어 있어 <b>인터넷이 없어도</b> 됩니다. 에폭을 바꾸려면 끝에 숫자(기본 12).</p>
+<div class="code term at-pc"><span class="lang">이러면 정상 — 30장씩일 때의 모양 (정확도 · 시간은 그날 사진마다 다름)</span><button class="copy" type="button">복사</button><pre><code>밑판 가중치: mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_160_no_top.h5
+사진 수: {'empty': 30, 'in_use': 30, 'on_hold': 30}
+Found 90 files belonging to 3 classes.
+Using 68 files for training.
+Using 22 files for validation.
+Epoch 1/12 … Epoch 12/12
+
+검증 정확도 0.xx (검증 22장) · 학습 …초 · 크기 1.55 MB
+행=정답, 열=판정 ['empty', 'in_use', 'on_hold']
+  empty    [ …, …, … ]
+  in_use   [ …, …, … ]
+  on_hold  [ …, …, … ]
+→ …\labs\common\model\seat_state_real.tflite</code></pre></div>
+</div><!--/pc-->
+<p class="look">👀 <b>볼 것</b> — <code>검증 정확도</code> 와 표(행=정답, 열=판정)의 대각선. 한 상태가 다른 상태로 많이 몰리면(예: <code>on_hold</code> 를 <code>in_use</code> 로) 그 상태 사진을 더 찍어 ①부터. 같은 폴더에 <code>train_record_real.json</code>(무엇으로 · 어떻게 배웠나)이 함께 생깁니다.</p>
+<p class="sos">🆘 <code>⚠️ 클래스마다 10장 이상 필요합니다</code> → 모자란 상태를 ① 에서 더 찍고 ② 부터 · <code>ModuleNotFoundError: tensorflow</code> → 텐서플로 없는 파이썬입니다 — <code>edge_venv</code> 경로 · <code>No such file</code> → <code>labs</code> 가 보이는 폴더에서 쳤는지(<code>dir</code>).</p>
+<p class="sub">[사실] 2026-11-27 강사 노트북(Windows · Python 3.11 · <code>edge_venv</code>)에서 샘플 그림(종류마다 16장)으로 시험: 로컬 가중치 사용 · 학습 36장 / 검증 12장 · 3에폭 4.1초 · 1.55 MB → 보드와 같은 ai_edge_litert 2.3.0 에서 <code>real</code> 줄 정상. 위 「30장씩일 때의 모양」의 <code>68 / 22</code> 는 25% 를 검증으로 떼는 규칙으로 정해지는 값입니다.</p>
+<h4>④ 나눠 주기 — 여러 보드로</h4>
+<div class="where-pc"><div class="where-h">💻 PC 에서 작업<span>PowerShell · 텐서플로가 있는 PC</span></div>
+<div class="code cmd at-pc"><span class="lang">💻 PC · PowerShell</span><button class="copy" type="button">복사</button><pre><code>scp .\labs\common\model\seat_state_real.tflite rasp@<span class="fv" data-f="ip">10.10.220.___</span>:~/labs/common/model/</code></pre></div>
+<p><b>오늘 수업에서는 강사가 이 파일을 나눠 드립니다 — 받은 파일을 이 명령으로 내 보드에 넣습니다.</b> 내 교실에서는 찍은 보드 먼저 넣고, 훈련생에게 같은 파일(<code>seat_state_real.tflite</code>, 약 1.6 MB)을 교육장 공유 방식(공유 폴더 · USB 등)으로 건네고, <b>각자 PC 에서</b> 같은 명령의 IP 만 자기 보드로 바꿔 보내게 합니다.</p>
+</div><!--/pc-->
+<h4>⑤ 확인 — 보드</h4>
+<div class="code cmd at-board"><span class="lang">🍓 보드 · ssh 창 (사진을 찍는 보드)</span><button class="copy" type="button">복사</button><pre><code>cd ~/labs/lab2_runtime/starter
+python3 ../../common/snap.py</code></pre></div>
+<p class="look">👀 <b>볼 것</b> — 출력에 <code>float</code> 아래 <code>real</code> 줄이 나오면 끝입니다. 책상 위를 바꿔 가며 두세 번 — <code>real</code> 이 상태를 따라가는지 봅니다. </p>
+<p class="sos">🆘 <code>real</code> 줄이 안 나옴 → 파일 자리(<code>~/labs/common/model/seat_state_real.tflite</code>)와 이름 철자.</p>
+<h4>⑥ 정리 — 모은 사진</h4>
+<div class="code cmd at-board"><span class="lang">🍓 보드 · ssh 창 (사진을 찍는 보드)</span><button class="copy" type="button">복사</button><pre><code>rm -r ~/labs/real_data
+ls ~/labs</code></pre></div>
+<p>모델을 만든 뒤에는 학습용 사진이 더 필요 없습니다. 찍은 보드의 <code>~/labs/real_data</code> 와 PC 로 가져온 <code>real_data</code> 폴더도 수업이 끝나면 지웁니다(2일차 마지막 시간 「사진 지우기」와 함께 · 정오표 4).</p>
+</details>
+
 <h3 id="l1-s7" class="step">보드 실측값 — 내 숫자와 견줘 봅니다</h3>
 <p><span class="sub">[사실] 2026-11-09 · Raspberry Pi 5 8GB · 위와 같은 보드. 옆자리·내 보드와 숫자가 달라도 정상입니다 — 온도·전원·케이스가 다르면 값이 다릅니다.</span></p>
 <div class="tbl"><table><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>쓸 수 있는 메모리</td><td>5,972MB (전체 8,058MB)</td></tr><tr><td>예산(60%)</td><td>3,583MB</td></tr><tr><td>판정</td><td>fit 5 · no-fit 1 — `text_generation_medium`(14,000MB) no-fit</td></tr><tr><td>카메라</td><td>붙음 · imx219</td></tr><tr><td>런타임</td><td>ai_edge_litert 하나</td></tr><tr><td>가속기</td><td>없음</td></tr></tbody></table></div>
@@ -1535,7 +1589,7 @@ start (Get-ChildItem *_one.jpg | Sort-Object LastWriteTime | Select-Object -Last
 </div><!--/pc-->
 <p class="look">👀 <b>볼 것</b> — 세 장의 판정이 <code>empty</code> · <code>in_use</code> · <code>on_hold</code> 로 바뀌는가. <code>float</code> 과 <code>real</code> 중 어느 쪽이 맞히는가 — 둘 다 같은 구조의 일을 하지만 <b>배운 사진이 다릅니다.</b> 지연(ms)은 실습 2 의 평균과 비슷한가.</p>
 <p class="sos">🆘 <b>안 되면</b> — PC 의 <code>scp</code> 가 <code>No such file</code> → 보드에서 위 명령을 먼저 돌렸는지, 파일 이름 끝(<code>_one</code> · <code>_three</code> …)이 맞는지 봅니다. 보드에서 <code>ls ~/labs/snaps</code> 로 있는 파일을 확인합니다.</p>
-<p class="sub">사진 아래 노란 글씨 — <code>float</code> 는 이 실습에서 재는 모델(<b>가상 그림</b>으로 배움), <code>real</code> 은 강사가 <b>실제 카메라 사진</b>으로 따로 배운 비교용 모델입니다(있을 때만 나옴). 가상 그림 모델이 진짜 책상에서 엉뚱하게 답하는 것은 <b>고장이 아니라</b> 무엇으로 배웠는가의 차이입니다. 사진은 <code>~/labs/snaps/</code> 에 남습니다 — 사람은 찍지 않고, 마지막 시간에 함께 지웁니다.</p>
+<p class="sub">사진 아래 노란 글씨 — <code>float</code> 는 이 실습에서 재는 모델(<b>가상 그림</b>으로 배움), <code>real</code> 은 강사가 <b>실제 카메라 사진</b>으로 따로 배운 비교용 모델입니다(있을 때만 나옴) — <a href="#realmodel">만드는 법</a>. 가상 그림 모델이 진짜 책상에서 엉뚱하게 답하는 것은 <b>고장이 아니라</b> 무엇으로 배웠는가의 차이입니다. 사진은 <code>~/labs/snaps/</code> 에 남습니다 — 사람은 찍지 않고, 마지막 시간에 함께 지웁니다.</p>
 <p class="next">➡️ <b>넘어가도 되나</b> — 사진을 열어 <b>볼 것</b>을 확인했으면 됩니다. 점검 점수와는 관계없습니다.</p>
 <div class="stepend"><label class="done"><input type="checkbox" id="ck-l2-run" data-k="l2-run"><span>이 단계 끝 — 했어요</span></label></div>
 <h3 id="l2-s6" class="step">보드 실측값 — 내 숫자와 견줘 봅니다</h3>
@@ -2061,7 +2115,7 @@ start (Get-ChildItem *_three.jpg | Sort-Object LastWriteTime | Select-Object -La
 <p class="look">👀 <b>볼 것</b> — 세 버전의 판정이 <b>같은가</b>, 확률과 ms 가 얼마나 다른가. int8 의 확률이 조금 다르게 나오는 것이 양자화의 흔적입니다. 판정이 엇갈리면 그것이 「정확도 손실」이 실제로 나타나는 모습입니다.</p>
 <p class="sos">🆘 <code>(no model file)</code> → 단계 2 에서 int8 파일을 아직 보드로 보내지 않았습니다.</p>
 <p class="sos">🆘 <b>안 되면</b> — PC 의 <code>scp</code> 가 <code>No such file</code> → 보드에서 위 명령을 먼저 돌렸는지, 파일 이름 끝(<code>_one</code> · <code>_three</code> …)이 맞는지 봅니다. 보드에서 <code>ls ~/labs/snaps</code> 로 있는 파일을 확인합니다.</p>
-<p class="sub">사진 아래 노란 글씨 — <code>float</code> 는 이 실습에서 재는 모델(<b>가상 그림</b>으로 배움), <code>real</code> 은 강사가 <b>실제 카메라 사진</b>으로 따로 배운 비교용 모델입니다(있을 때만 나옴). 가상 그림 모델이 진짜 책상에서 엉뚱하게 답하는 것은 <b>고장이 아니라</b> 무엇으로 배웠는가의 차이입니다. 사진은 <code>~/labs/snaps/</code> 에 남습니다 — 사람은 찍지 않고, 마지막 시간에 함께 지웁니다.</p>
+<p class="sub">사진 아래 노란 글씨 — <code>float</code> 는 이 실습에서 재는 모델(<b>가상 그림</b>으로 배움), <code>real</code> 은 강사가 <b>실제 카메라 사진</b>으로 따로 배운 비교용 모델입니다(있을 때만 나옴) — <a href="#realmodel">만드는 법</a>. 가상 그림 모델이 진짜 책상에서 엉뚱하게 답하는 것은 <b>고장이 아니라</b> 무엇으로 배웠는가의 차이입니다. 사진은 <code>~/labs/snaps/</code> 에 남습니다 — 사람은 찍지 않고, 마지막 시간에 함께 지웁니다.</p>
 <p class="next">➡️ <b>넘어가도 되나</b> — 사진을 열어 <b>볼 것</b>을 확인했으면 됩니다. 점검 점수와는 관계없습니다.</p>
 <div class="stepend"><label class="done"><input type="checkbox" id="ck-l3-run" data-k="l3-run"><span>이 단계 끝 — 했어요</span></label></div>
 <h3 id="l3-s6" class="step">보드 실측값 — 내 숫자와 견줘 봅니다</h3>
